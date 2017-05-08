@@ -12,6 +12,7 @@ import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from 'express-session';
+import api from './routes';
 
 
 /* mongodb connection */
@@ -34,7 +35,14 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(function (err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
 app.use('/', express.static(path.join(__dirname, './../public')));
+
+app.use('/api', api);
 
 app.get('/hello', (req, res) => {
     return res.send('Hello CodeLab');
