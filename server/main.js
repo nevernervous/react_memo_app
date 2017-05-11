@@ -20,8 +20,8 @@ const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', () => {
     console.log('Conneted to mongodb server');
-    mongoose.connect('mongodb://localhost/codelab');
 });
+mongoose.connect('mongodb://localhost/codelab');
 
 const app = express();
 const port = 3000;
@@ -43,6 +43,10 @@ app.use(function (err, req, res, next) {
 app.use('/', express.static(path.join(__dirname, './../public')));
 
 app.use('/api', api);
+
+app.get('/hello', (req, res) => {
+    return res.send('Hello CodeLab');
+});
 
 // support client-side routing
 app.get('*', (req, res) => {

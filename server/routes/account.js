@@ -17,7 +17,7 @@ router.post('/signup', (req, res) => {
     // check pass length
     if(req.body.password.length < 4 || typeof req.body.password !== "string") {
         return res.status(400).json({
-            errror: "BAD PASSWORD",
+            error: "BAD PASSWORD",
             code: 2
         });
     }
@@ -65,6 +65,15 @@ router.post('/signin', (req, res) => {
             });
         }
 
+        //check whether the password is valid
+        if(!account.validateHash(req.body.password)) {
+            return res.status(401).json({
+                error: "LOGINN FAILED",
+                code: 1
+            });
+        }
+
+        // alter session
         let session = req.session;
         session.loginInfo = {
             _id: account._id,
